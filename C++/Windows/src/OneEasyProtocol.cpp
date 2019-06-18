@@ -125,7 +125,8 @@ void SerialPort::close(void)
 int SerialPort::write(std::string txString, int len = 22)
 {
 	char cstr[23];
-	txString.copy(cstr, 23);
+
+	strcpy_s(cstr, txString.c_str());
 
 	unsigned char txData[22];
 
@@ -168,22 +169,22 @@ std::string Converter::valueToString(float value)
 		std::string strraw = "";
 		std::string strsigned = "";
 
-		if (value > -1.0 and value < 1.0)
+		if (value > -1.0 && value < 1.0)
 		{
 			strraw = "000";
 			strraw.append(strint);
 		}
-		else if (value > -10.0 and value < 10.0)
+		else if (value > -10.0 && value < 10.0)
 		{
 			strraw = "00";
 			strraw.append(strint);
 		}
-		else if (value > -100.0 and value < 100.0)
+		else if (value > -100.0 && value < 100.0)
 		{
 			strraw = "0";
 			strraw.append(strint);
 		}
-		else if (value > -1000.0 and value < 1000.0)
+		else if (value > -1000.0 && value < 1000.0)
 		{
 			strraw = strint;
 		}
