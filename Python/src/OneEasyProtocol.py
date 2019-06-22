@@ -7,6 +7,7 @@
 import serial
 import time
 import sys
+import glob
 
 class Pos(object):
     def __init__(self):
@@ -501,7 +502,7 @@ class EasyProtocol(object):
         if sys.platform.startswith('win'):
             ports = ['COM%s' % (i+1) for i in range(256)]
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/ttyUSB*')
+            ports = glob.glob('/dev/tty*')
         elif sys.platform.startswith('darwin'):
             ports = glob.glob('/dev/tty.usbserial*')
         else:
@@ -511,6 +512,8 @@ class EasyProtocol(object):
     
     def find_robot(self):
         ports = self.__find_ports()
+        print(ports)
+        print("Hello")
         if ports != "":
             traffic=None
             portname=""
@@ -520,6 +523,7 @@ class EasyProtocol(object):
                     print("Checking port: " + port +"...")
                     time.sleep(0.25)
                     self.__connection.reset_input_buffer()
+                    time.sleep(0.25)
                     traffic = self.__connection.read(1)
                     time.sleep(0.25)
                     if traffic != None:
