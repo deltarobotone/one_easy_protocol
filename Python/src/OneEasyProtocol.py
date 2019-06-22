@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[7]:
-
-
 import serial
 import time
 import sys
@@ -571,4 +565,3 @@ class EasyProtocol(object):
         else:   
             print("Robot is waiting for signals...")
         return 0
-
