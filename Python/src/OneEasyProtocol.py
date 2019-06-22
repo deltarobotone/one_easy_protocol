@@ -69,12 +69,9 @@ class Converter(object):
                 string = '0' + string
             
             elif (value > -1000.0 and value < 1000.0):
-                string = string
-                
+                string = string 
             else:
-                print('Values not valid! Please check you values. Valid numbers are between -999.9 and 999.9')
                 return '0000'
-
                 
             if(value>=0.0):
                 string = '+' + string
@@ -92,12 +89,6 @@ class Converter(object):
         strY=self.valueToString(pos.y)
         strZ=self.valueToString(pos.z)
         return strX,strY,strZ
-    
-class Print(object):
-    def __init__(self):
-        self.command = True
-        self.info = True
-        self.protocol = True
         
 class Functions(object):        
     def __init__(self):
@@ -116,22 +107,6 @@ class Move(object):
         self.__protocol = Protocol()
         self.__converter = Converter()
         self.__pos = Pos()
-        
-    def __waitForRobot(self):
-        print("Robot executes a command...")
-        i=0
-        z=10
-        while i<z:
-            line = self.__connection.read(1)
-            if line == self.__robotid.encode():
-                break
-            print("...")
-            i+=1
-        if i==10:
-            print("Timout! Please check the connection to the robot!")
-        else:   
-            print("Robot is waiting for signals...")
-        return 0
          
     def __checkParameters(self):
         if( self.__robotid==None and self.__deviceid==None and self.__connection==None):
@@ -157,12 +132,16 @@ class Move(object):
                     txstring = txstring +'#' 
                     i+=1
             txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
             self.__connection.write(txbytes)
-            command = 'Move to position ' + 'X:' + str(positionX) + ' Y:' + str(positionY) + ' Z:' + str(positionZ) + ' Speed:' + str(speed) +'%'
-            print(command)
             print('One easy protocol: ' + txstring)
-            time.sleep(0.02)
-            self.__waitForRobot()
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
     def home(self):
@@ -174,12 +153,17 @@ class Move(object):
                 while(i<22):
                     txstring = txstring +'#' 
                     i+=1
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Move to home-position! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
 #     def getPosition(self):
@@ -203,22 +187,6 @@ class Gripper(object):
             return 1
         else:
             return 0
-        
-    def __waitForRobot(self):
-        print("Robot executes a command...")
-        i=0
-        z=10
-        while i<z:
-            line = self.__connection.read(1)
-            if line == self.__robotid.encode():
-                break
-            print("...")
-            i+=1
-        if i==10:
-            print("Timout! Please check the connection to the robot!")
-        else:   
-            print("Robot is waiting for signals...")
-        return 0
     
     def open(self):
         if(self.__checkParameters()==0):
@@ -228,13 +196,17 @@ class Gripper(object):
                 while(i<22):
                     txstring = txstring +'#' 
                     i+=1
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Gripper open! '
-                print(command)
-                print('One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
     
     def close(self):
@@ -245,13 +217,17 @@ class Gripper(object):
                 while(i<22):
                     txstring = txstring +'#' 
                     i+=1
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Gripper close! '
-                print(command)
-                print('One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
     
 #     def getStatus(self):
@@ -272,22 +248,6 @@ class ExtMotor(object):
             return 1
         else:
             return 0
-    
-    def __waitForRobot(self):
-        print("Robot executes a command...")
-        i=0
-        z=10
-        while i<z:
-            line = self.__connection.read(1)
-            if line == self.__robotid.encode():
-                break
-            print("...")
-            i+=1
-        if i==10:
-            print("Timout! Please check the connection to the robot!")
-        else:   
-            print("Robot is waiting for signals...")
-        return 0
         
     
     def start(self,speed=100.0):
@@ -305,12 +265,17 @@ class ExtMotor(object):
                 v = v.replace('+','')
                 v = v.replace('-','')
                 txstring = txstring + v
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Start ext. motor! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
     def stop(self):
@@ -321,12 +286,17 @@ class ExtMotor(object):
                 while(i<22):
                     txstring = txstring +'#' 
                     i+=1
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Stop ext. motor! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
     def setSpeed(self,speed):
@@ -344,12 +314,17 @@ class ExtMotor(object):
                 v = v.replace('+','')
                 v = v.replace('-','')
                 txstring = txstring + v
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Set ext. motor speed! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
 #     def getSpeed(self):
@@ -374,22 +349,6 @@ class Light(object):
             return 1
         else:
             return 0
-        
-    def __waitForRobot(self):
-        print("Robot executes a command...")
-        i=0
-        z=10
-        while i<z:
-            line = self.__connection.read(1)
-            if line == self.__robotid.encode():
-                break
-            print("...")
-            i+=1
-        if i==10:
-            print("Timout! Please check the connection to the robot!")
-        else:   
-            print("Robot is waiting for signals...")
-        return 0
     
     def on(self, intensity=100.0):
         if(self.__checkParameters()==0):
@@ -403,12 +362,17 @@ class Light(object):
                 ledi = ledi.replace('+','')
                 ledi = ledi.replace('-','')
                 txstring = txstring + ledi
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Light on! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
     def off(self):
@@ -419,12 +383,17 @@ class Light(object):
                 while(i<22):
                     txstring = txstring +'#' 
                     i+=1
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Light off! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
         
     def setColour(self, colour, intensity = 100.0):
@@ -439,12 +408,17 @@ class Light(object):
                 ledi = ledi.replace('+','')
                 ledi = ledi.replace('-','')
                 txstring = txstring + ledi
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Set color! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
     def setIntensity(self, intensity):
         if(self.__checkParameters()==0):
@@ -458,12 +432,17 @@ class Light(object):
                 ledi = v.replace('+','')
                 ledi = v.replace('-','')
                 txstring = txstring + ledi
-                txbytes = str.encode(txstring)
-                self.__connection.write(txbytes)
-                command = 'Set intensity! '
-                print(command + 'One easy protocol: ' + txstring)
-                time.sleep(0.02)
-                self.__waitForRobot()
+            txbytes = str.encode(txstring)
+            self.__connection.reset_output_buffer()
+            time.sleep(0.01)
+            self.__connection.write(txbytes)
+            print('One easy protocol: ' + txstring)
+            self.__connection.reset_input_buffer()
+            time.sleep(0.01)
+            while True:
+                line = self.__connection.read(1)
+                if line == self.__robotid.encode():
+                    break
         return 0
              
 class EasyProtocol(object):
@@ -479,47 +458,6 @@ class EasyProtocol(object):
         self.extmotor = ExtMotor()
         self.light = Light()
         self.functions = Functions()
-        
-        self.__print = Print()
-        self.__print.command = True
-        self.__print.info = True
-        self.__print.protocol = True
-        
-    def setPrintCommandOff(self):
-        self.__print.command = False
-        return 0
-    
-    def setPrintCommandOn(self):
-        self.__print.command = True
-        return 0
-    
-    def setPrintProtocolOff(self):
-        self.__print.protocol = False
-        return 0
-    
-    def setPrintProtocolOn(self):
-        self.__print.protocol = True
-        return 0
-    
-    def setPrintInfoOff(self):
-        self.__print.info = False
-        return 0
-    
-    def setPrintInfoOn(self):
-        self.__print.info = True
-        return 0
-    
-    def setPrintOff(self):
-        self.__print.command = False
-        self.__print.info = False
-        self.__print.protocol = False
-        return 0
-    
-    def setPrintOn(self):
-        self.__print.command = True
-        self.__print.info = True
-        self.__print.protocol = True
-        return 0
     
     def setPort(self,port,baudrate = 9600,timeout = 1):
         self.__timeout = timeout
@@ -581,6 +519,7 @@ class EasyProtocol(object):
                     self.__connection = serial.Serial(port,baudrate=self.__baudrate,timeout=self.__timeout)
                     print("Checking port: " + port +"...")
                     time.sleep(0.25)
+                    self.__connection.reset_input_buffer()
                     traffic = self.__connection.read(1)
                     time.sleep(0.25)
                     if traffic != None:
@@ -614,4 +553,20 @@ class EasyProtocol(object):
         
     def __del__(self):
         self.stop()
+        
+    def __waitForRobot(self):
+        print("Robot executes a command...")
+        i=0
+        z=10
+        while i<z:
+            line = self.__connection.read(1)
+            if line == self.__robotid.encode():
+                break
+            print("...")
+            i+=1
+        if i==10:
+            print("Timout! Please check the connection to the robot!")
+        else:   
+            print("Robot is waiting for signals...")
+        return 0
 
