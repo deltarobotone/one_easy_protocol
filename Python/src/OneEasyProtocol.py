@@ -470,12 +470,12 @@ class EasyProtocol(object):
             i=0
             z=10
             while i<z:
-                print("...searching for robot ("+str(i+1)+'/'+str(z)+')')
                 traffic = self.__connection.read(1)
                 time.sleep(0.25)
                 if traffic == self.__robotid.encode():
                     print("...connection sucessfully etabished!")
                     break
+                print("...searching for robot ("+str(i+1)+'/'+str(z)+')')
                 i+=1 
                 traffic = None
         except:
@@ -485,7 +485,6 @@ class EasyProtocol(object):
             print("...no robot available. Please connect your robot and activate serial communication software!")
             print("Dont't forget to activate the USB Control Mode (Ctrl) using the switch on the circuit board!")
         elif traffic!=None:
-            print("Found robot with ID: " + str(traffic.decode()))
             self.move = Move(self.__connection,self.__robotid,self.__deviceid)
             self.gripper = Gripper(self.__connection,self.__robotid,self.__deviceid)
             self.extmotor = ExtMotor(self.__connection,self.__robotid,self.__deviceid)
@@ -496,9 +495,7 @@ class EasyProtocol(object):
         if sys.platform.startswith('win'):
             ports = ['COM%s' % (i+1) for i in range(256)]
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/tty*')
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/tty.usbserial*')
+            ports = glob.glob('/dev/ttyACM*')
         else:
             print("Can' finding ports on your operating system")
             ports = ""
@@ -518,7 +515,7 @@ class EasyProtocol(object):
                     time.sleep(0.25)
                     traffic = self.__connection.read(1)
                     time.sleep(0.25)
-                    if traffic != None:
+                    if traffic != None and str(traffic.decode()) != "":
                         print("...found robot with ID: " + str(traffic.decode()) + " on port: "+ port)
                         self.__connection.close()
                         self.__robotid = traffic.decode()

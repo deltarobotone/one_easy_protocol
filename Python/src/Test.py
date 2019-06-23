@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[ ]:
-
-
 import OneEasyProtocol as oep
 robot = oep.EasyProtocol()
 robot.find_robot()
@@ -15,21 +9,14 @@ robot.gripper.close()
 robot.functions.waitFor(2000)
 
 robot.move.ptp(0.0,0.0,85.0,50.0)
-robot.functions.waitFor(1000)
 robot.move.ptp(-30.0,0.0,105.0,85.0)
-robot.functions.waitFor(1000)
 robot.move.ptp(-30.0,0.0,115.00,20.00)
-robot.functions.waitFor(1000)
 robot.move.ptp(-30.0,0.0,105.0,50.0)
-robot.functions.waitFor(1000)
 robot.move.ptp(30.0,0.0,105.0,85.0)
-robot.functions.waitFor(1000)
 robot.move.ptp(30.0,0.0,115.00,20.00)
-robot.functions.waitFor(1000)
 robot.move.ptp(30.0,0.0,105.0,50.0)
-robot.functions.waitFor(1000)
-robot.move.ptp(0.0,0.0,85.0,50.0)
-robot.functions.waitFor(1000)
+robot.move.ptp(0.0,0.0,105,5.0)
+
 color = oep.Color()
 robot.functions.waitFor(1000)
 robot.light.setColour(color.red,10.0)
@@ -41,6 +28,7 @@ robot.functions.waitFor(1000)
 robot.light.setColour(color.red,75.0)
 robot.functions.waitFor(1000)
 robot.light.setColour(color.red,100.0)
+
 robot.functions.waitFor(1000)
 robot.light.setColour(color.blue)
 robot.functions.waitFor(1000)
@@ -62,4 +50,3 @@ robot.functions.waitFor(2000)
 robot.extmotor.stop()
 
 robot.stop()
-
