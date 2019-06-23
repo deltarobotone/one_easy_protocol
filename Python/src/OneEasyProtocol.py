@@ -340,7 +340,7 @@ class Light(object):
         
     def __checkParameters(self):
         if( self.__robotid==None and self.__connection==None):
-            print("...no connection available. Please connect a robot sucessfully with start-function!")
+            print("...no connection available. Please connect a robot sucessfully with start()-function!")
             return 1
         else:
             return 0
@@ -495,7 +495,9 @@ class EasyProtocol(object):
         if sys.platform.startswith('win'):
             ports = ['COM%s' % (i+1) for i in range(256)]
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/ttyACM*')
+            portsUSB = glob.glob('/dev/ttyUSB*')
+            portsACM = glob.glob('/dev/ttyACM*')
+            ports = portsUSB + portsACM
         else:
             print("Can' finding ports on your operating system")
             ports = ""
@@ -510,12 +512,21 @@ class EasyProtocol(object):
                 try:
                     self.__connection = serial.Serial(port,baudrate=self.__baudrate,timeout=self.__timeout)
                     print("Checking port: " + port +"...")
+                    check = ""
                     time.sleep(0.25)
                     self.__connection.reset_input_buffer()
                     time.sleep(0.25)
                     traffic = self.__connection.read(1)
                     time.sleep(0.25)
                     if traffic != None and str(traffic.decode()) != "":
+                        check = str(traffic.decode())
+                        
+                    time.sleep(0.25)
+                    self.__connection.reset_input_buffer()
+                    time.sleep(0.25)
+                    traffic = self.__connection.read(1)
+                    time.sleep(0.25)
+                    if traffic != None and str(traffic.decode()) == check and check != "":
                         print("...found robot with ID: " + str(traffic.decode()) + " on port: "+ port)
                         self.__connection.close()
                         self.__robotid = traffic.decode()
@@ -526,6 +537,7 @@ class EasyProtocol(object):
                 except:
                     print("...error while checking port: "+ port) 
             else:
+                self.__port = None
                 print("...no robot available. Please connect your robot and activate serial communication software!")
                 print("Dont't forget to activate the USB Control Mode (Ctrl) using the switch on the circuit board!")
         return 
@@ -536,7 +548,8 @@ class EasyProtocol(object):
         if len(robotidstr)==1 and len(deviceidstr)==1:
             self.__robotid = robotidstr
             self.__deviceid = deviceidstr
-            self.__setCommunication()
+            if self.__port != None:
+                self.__setCommunication()
         else:
             print("Please enter only one symbol to set the Robot-ID and Device-ID") 
         return 0
