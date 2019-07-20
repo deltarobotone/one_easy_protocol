@@ -9,12 +9,6 @@ Delta-Robot One recieve data in a very simple structure which is developed for t
 |Windows/Linux|Python|Every Python IDE|https://github.com/deltarobotone/one-easy-protocol|
 |Windows|C++|Visual Studio 2015|Windows/C++/VS2015|
 
-## Import the library (C++)
-
-```c
-#include "easyprotocol.h"
-```
-
 ## Prepare the robot
 
 First you have to set the robot in remote contol mode with the switch on the circuit board (right side of display)
@@ -43,6 +37,12 @@ void loop()
 ```
 
 For more instructions like bluetooth remote control have a look on the full [remote contol example](https://github.com/deltarobotone/one_system_library/blob/master/examples/Remote/Remote.ino) of the library.
+
+## Import the library (C++)
+
+```c
+#include "easyprotocol.h"
+```
 
 ## Option 1: Connect the robot automatically
 
