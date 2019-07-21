@@ -4,10 +4,12 @@ Delta-Robot One recieve data in a very simple structure which is developed for t
 
 ## Supported systems
 
-|Operating System|Programming Language|IDE|Folder/Path|
+|Operating System|Programming Language|IDE|Link/Path|
 |---|---|---|---|
 |Windows/Linux|Python|Every Python IDE|https://github.com/deltarobotone/one-easy-protocol|
-|Windows|C++|Visual Studio 2015|Windows/C++/VS2015|
+|Windows|C++|Visual Studio|C++/VisualStudio|
+
+Tested successfully with Visual Stusio 2015 & 2019. Check out the example project for this IDE's (VS2015/VS2019). You also can use the precompiled ones for first communication tests.
 
 ## Prepare the robot
 
