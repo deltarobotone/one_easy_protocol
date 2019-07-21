@@ -438,6 +438,11 @@ void EasyProtocol::start(char robotid, char deviceid)
 	extmotor.setID(this->robotid, this->deviceid);
 	functions.setID(this->robotid, this->deviceid);
 	connected = setCommunication();
+	move.setSerialStatus(connected);
+	gripper.setSerialStatus(connected);
+	light.setSerialStatus(connected);
+	extmotor.setSerialStatus(connected);
+	functions.setSerialStatus(connected);
 }
 void EasyProtocol::stop()
 {
@@ -530,9 +535,11 @@ void EasyProtocol::findPorts(int baudrate, std::string &port, char& robotid)
 					if (info == true) std::cout << "...found robot with ID: " << rxchar << " on port: " << portnr << "\n";
 					robotid = rxchar;
 					port = portnr;
+					connection.close();
+					break;
 				}
 			}
-			connection.close();
+			
 		}
 		if (i == 255)
 		{
