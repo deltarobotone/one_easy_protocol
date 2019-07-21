@@ -6,7 +6,7 @@ Delta-Robot One recieve data in a very simple structure which is developed for t
 
 |Operating System|Programming Language|IDE|Link/Path|
 |---|---|---|---|
-|Windows/Linux|Python|Every Python IDE|[link to one-easy-protocol](https://github.com/deltarobotone/one-easy-protocol)|
+|Windows/Linux|Python|Every Python IDE|[one-easy-protocol](https://github.com/deltarobotone/one-easy-protocol)|
 |Windows|C++|Visual Studio|C++/VisualStudio|
 
 Tested successfully with Visual Stusio 2015 & 2019. Check out the example project for this IDE's (VS2015/VS2019). You also can use the precompiled ones for first communication tests.
