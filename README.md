@@ -13,7 +13,7 @@ Tested successfully with Visual Studio 2015 & 2019. Check out the example projec
 
 ## Prepare the robot
 
-First you have to set the robot in remote contol mode with the switch on the circuit board (right side of display)
+First you have to set the robot in remote control mode with the switch on the circuit board (right side of display)
 
 [<img src="https://github.com/deltarobotone/image_database/blob/master/drawings/drawings%20(19).PNG" width="120">](https://raw.githubusercontent.com/deltarobotone/image_database/master/drawings/drawings%20(19).PNG)
 
