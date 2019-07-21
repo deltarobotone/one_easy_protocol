@@ -130,7 +130,7 @@ robot.functions.waitFor(1000);
 //External motor control
 robot.extmotor.start();
 robot.functions.waitFor(2000);
-robot.extmotor.setSpeed(50.0);
+robot.extmotor.setSpeed(50.0); //0.0-255.0
 robot.functions.waitFor(2000);
 robot.extmotor.stop();
 ```
