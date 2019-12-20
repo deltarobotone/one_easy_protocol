@@ -9,7 +9,9 @@ Delta-Robot One recieve data in a very simple structure which is developed for t
 |Windows/Linux|Python|Every Python IDE|[one-easy-protocol](https://github.com/deltarobotone/one-easy-protocol)|
 |Windows|C++|Visual Studio|C++/VisualStudio|
 
-Tested successfully with Visual Studio 2015 & 2019. Check out the example project for this IDE's (VS2015/VS2019). You also can use the precompiled ones for first communication tests.
+### All SDK's for One Easy Protocol are released as single file releases to provide an easy usage in your project.
+
+Tested successfully with Visual Studio 2015 & 2019. VS 2015 only supported at version 0.1. Please use [>>release v0.1<<](https://github.com/deltarobotone/one_easy_protocol/archive/v0.1.zip) for Visual studio 2015 (without flowchart support). Check out the example project for this IDE's. You also can use the precompiled ones for first communication tests.
 
 ## Prepare the robot
 
@@ -134,6 +136,21 @@ robot.extmotor.setSpeed(50.0); //0.0-255.0
 robot.functions.waitFor(2000);
 robot.extmotor.stop();
 ```
+
+## Flowchart support
+Load and start a flowchart file (.fc) created with One Smart Control Desktop or Mobile
+
+```c
+//Load Flowchart from file
+robot.flowchart.load("<path to your file>.fc");
+
+//Print Flowchart to console
+robot.flowchart.print();
+
+//Start Flowchart
+robot.flowchart.start();
+```
+
 ## Deconnect robot
 
 ```c
