@@ -1,5 +1,6 @@
 # include "easyprotocol.h"
 
+
 SerialPort::SerialPort()
 {
 	serialPortHandle = INVALID_HANDLE_VALUE;
@@ -401,6 +402,7 @@ EasyProtocol::EasyProtocol(bool info) :
 	light(connection, info),
 	extmotor(connection, info),
 	functions(connection, info),
+	flowchart(move,gripper,light,extmotor,functions),
 	info(info)
 {
 }
@@ -409,6 +411,7 @@ EasyProtocol::~EasyProtocol()
 	connection.clear();
 	connection.close();
 }
+
 void EasyProtocol::findRobot()
 {
 	findPorts(baudrate, port, robotid);
@@ -596,4 +599,364 @@ void Basic::setID(char robotid, char deviceid)
 void Basic::setSerialStatus(bool status)
 {
 	connected = status;
+}
+
+std::string SmartControlData::toString()
+{
+	std::string dataString;
+
+	if (dataid == ID::waitFor)
+	{
+		dataString = "Wait for >> " + std::to_string(waitFortime) + " ms ";
+	}
+
+	if (dataid == ID::move)
+	{
+		dataString = "Move to >> X: " + std::to_string(xPosition) + " mm " + "> Y: " + std::to_string(yPosition) + " mm " + "> Z: " + std::to_string(zPosition) + " mm " + "> speed: " + std::to_string(velocity) + " %";
+	}
+
+	if (dataid == ID::gripper)
+	{
+		if (gripperStatus == true) dataString = "Gripper >> close";
+		else dataString = "Gripper >> open";
+	}
+
+	if (dataid == ID::light)
+	{
+		std::string colourData;
+		bool lightStatus = false;
+		if (colour == Colour::red)
+		{
+			colourData = "red";
+			lightStatus = true;
+		}
+		else if (colour == Colour::green)
+		{
+			colourData = "green";
+			lightStatus = true;
+		}
+		else if (colour == Colour::blue)
+		{
+			colourData = "blue";
+			lightStatus = true;
+		}
+		else if (colour == Colour::cyan)
+		{
+			colourData = "cyan";
+			lightStatus = true;
+		}
+		else if (colour == Colour::magenta)
+		{
+			colourData = "magenta";
+			lightStatus = true;
+		}
+		else if (colour == Colour::yellow)
+		{
+			colourData = "yellow";
+			lightStatus = true;
+		}
+		else if (colour == Colour::white)
+		{
+			colourData = "white";
+			lightStatus = true;
+		}
+		else
+		{
+			colourData = "off";
+			lightStatus = false;
+		}
+
+		if (lightStatus == true)
+		{
+			dataString = "Light >> on > colour: " + colourData + " > intensity: " + std::to_string(intensity) + " %";
+		}
+		else
+		{
+			dataString = "Light >> off";
+		}
+	}
+
+	return dataString;
+}
+
+std::string SmartControlData::toDataString()
+{
+	std::string  dataString;
+
+	if (dataid == ID::waitFor)
+	{
+		dataString = ID::waitFor + " " + std::to_string(waitFortime);
+	}
+
+	if (dataid == ID::move)
+	{
+		dataString = ID::move + " " + std::to_string(xPosition) + " " + std::to_string(yPosition) + " " + std::to_string(zPosition) + " " + std::to_string(velocity) + " " + std::to_string(workingSpaceStatus);
+	}
+
+	if (dataid == ID::gripper)
+	{
+		if (gripperStatus == true) dataString = ID::gripper + " " + "1";
+		else dataString = ID::gripper + " " + "0";
+	}
+
+	if (dataid == ID::light)
+	{
+		std::string  colourData;
+		bool lightStatus = false;
+		if (colour == Colour::red)
+		{
+			colourData = "1";
+			lightStatus = true;
+		}
+		else if (colour == Colour::green)
+		{
+			colourData = "2";
+			lightStatus = true;
+		}
+		else if (colour == Colour::blue)
+		{
+			colourData = "3";
+			lightStatus = true;
+		}
+		else if (colour == Colour::cyan)
+		{
+			colourData = "4";
+			lightStatus = true;
+		}
+		else if (colour == Colour::magenta)
+		{
+			colourData = "5";
+			lightStatus = true;
+		}
+		else if (colour == Colour::yellow)
+		{
+			colourData = "6";
+			lightStatus = true;
+		}
+		else if (colour == Colour::white)
+		{
+			colourData = "7";
+			lightStatus = true;
+		}
+		else
+		{
+			colourData = "off";
+			lightStatus = false;
+		}
+
+		if (lightStatus == true)
+		{
+			dataString = ID::light + " " + "1" + " " + colourData + " " + std::to_string(intensity);
+		}
+		else
+		{
+			dataString = ID::light + " " + "0";
+		}
+	}
+
+	return dataString;
+}
+
+void SmartControlData::fromDataString(std::string dataString)
+{
+	std::stringstream ss(dataString);
+
+	std::vector<std::string> datalist;
+
+	std::string temp;
+	while (ss >> temp)datalist.push_back(temp);
+
+	if (datalist.at(0) == ID::waitFor)
+	{
+		dataid = datalist.at(0);
+		robotid = "";
+		deviceid = "";
+
+		colour = "";
+		intensity = 0;
+
+		xPosition = 0;
+		yPosition = 0;
+		zPosition = 0;
+		velocity = 0;
+
+		workingSpaceStatus = false;
+
+		gripperStatus = false;
+
+		waitFortime = std::stoi(datalist.at(1));
+	}
+
+	if (datalist.at(0) == ID::move)
+	{
+		dataid = datalist.at(0);
+		robotid = "";
+		deviceid = "";
+
+		colour = "";
+		intensity = 0;
+
+		xPosition = std::stoi(datalist.at(1));
+		yPosition = std::stoi(datalist.at(2));
+		zPosition = std::stoi(datalist.at(3));
+		velocity = std::stoi(datalist.at(4));
+
+		if (std::stoi(datalist.at(5)) == 0) workingSpaceStatus = false;
+		if (std::stoi(datalist.at(5)) == 1) workingSpaceStatus = true;
+
+		gripperStatus = false;
+
+		waitFortime = 0;
+	}
+
+	if (datalist.at(0) == ID::gripper)
+	{
+		dataid = datalist.at(0);
+		robotid = "";
+		deviceid = "";
+
+		colour = "";
+		intensity = 0;
+
+		xPosition = 0;
+		yPosition = 0;
+		zPosition = 0;
+		velocity = 0;
+
+		workingSpaceStatus = false;
+
+		if (std::stoi(datalist.at(1)) == 0) gripperStatus = false;
+		if (std::stoi(datalist.at(1)) == 1) gripperStatus = true;
+
+		waitFortime = 0;
+	}
+
+	if (datalist.at(0) == ID::light)
+	{
+		dataid = datalist.at(0);
+		robotid = "";
+		deviceid = "";
+
+		if (std::stoi(datalist.at(1)) == 0)
+		{
+			colour = Protocol::lightoff;
+			intensity = 0;
+		}
+		if (std::stoi(datalist.at(1)) == 1)
+		{
+			switch (std::stoi(datalist.at(2)))
+			{
+			case 1: colour = Colour::red;
+				break;
+			case 2: colour = Colour::green;
+				break;
+			case 3: colour = Colour::blue;
+				break;
+			case 4: colour = Colour::cyan;
+				break;
+			case 5: colour = Colour::magenta;
+				break;
+			case 6: colour = Colour::yellow;
+				break;
+			case 7: colour = Colour::white;
+				break;
+			}
+			intensity = std::stoi(datalist.at(3));
+		}
+
+		xPosition = 0;
+		yPosition = 0;
+		zPosition = 0;
+		velocity = 0;
+
+		workingSpaceStatus = false;
+		gripperStatus = false;
+
+		waitFortime = 0;
+	}
+}
+
+Flowchart::Flowchart(Move& move, Gripper& gripper, Light& light, ExtMotor& extmotor, Functions& functions) :
+	move(move),
+	gripper(gripper),
+	light(light),
+	extmotor(extmotor),
+	functions(functions)
+{
+}
+
+void Flowchart::load(std::string path)
+{
+	std::string line;
+	std::ifstream file(path);
+
+	if (file.is_open())
+	{
+
+		controlDataStore.clear();
+
+		int header = 3;
+
+		while (getline(file, line))
+		{
+			if (header == 0)
+			{
+				SmartControlData data;
+				data.fromDataString(line);
+				controlDataStore.push_back(data);
+			}
+			else
+			{
+				header--;
+			}
+		}
+		file.close();
+
+		controlDataList.clear();
+
+		for (int i = 0; i < controlDataStore.size(); i++)
+		{
+			SmartControlData data = controlDataStore.at(i);
+			controlDataList.push_back(data.toString());
+		}
+	}
+}
+
+void Flowchart::start()
+{
+	for (int i = 0; i < controlDataStore.size(); i++)
+	{
+		SmartControlData controlData;
+		controlData = controlDataStore.at(i);
+
+		if (controlData.dataid == ID::move)
+		{
+			move.ptp(controlData.xPosition, controlData.yPosition, controlData.zPosition, controlData.velocity);
+		}
+		if (controlData.dataid == ID::gripper)
+		{
+			if (controlData.gripperStatus == true)gripper.close();
+			else gripper.open();
+		}
+		if (controlData.dataid == ID::light)
+		{
+			if (controlData.colour != Protocol::lightoff)light.setColour(controlData.colour, controlData.intensity);
+			else light.off();
+		}
+		if (controlData.dataid == ID::waitFor)
+		{
+			functions.waitFor(controlData.waitFortime);
+		}
+	}
+}
+
+void Flowchart::print()
+{
+	for (int i = 0; i < controlDataStore.size(); i++)
+	{
+		SmartControlData controlData;
+		controlData = controlDataStore.at(i);
+		std::string output = controlData.toString();
+		std::cout << output << "\n";
+	}
 }

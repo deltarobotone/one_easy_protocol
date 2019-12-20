@@ -1,10 +1,13 @@
-#include <iostream>
 #include <string>
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <vector>
+#include <iostream> 
+#include <fstream>
+#include <sstream>
 #include <Windows.h>
 
 #ifndef EASYPROTOCOL
@@ -53,6 +56,14 @@ namespace Colour
 	const std::string white = Protocol::lightwhite;
 };
 
+namespace ID
+{
+	const std::string move = "M";
+	const std::string light = "L";
+	const std::string gripper = "G";
+	const std::string extMmotor = "E";
+	const std::string waitFor = "T";
+};
 
 class Pos
 {
@@ -133,6 +144,49 @@ public:
 	void waitFor(int milliseconds);
 };
 
+class SmartControlData
+{
+public:
+	std::string dataid = "";
+	std::string robotid = "";
+	std::string deviceid = "";
+
+	std::string colour = "";
+	int intensity = 0; //%
+
+	int xPosition = 0; //mm
+	int yPosition = 0; //mm
+	int zPosition = 0; //mm
+	int velocity = 0;  //%
+	bool workingSpaceStatus = false;
+
+	bool gripperStatus = false;
+
+	int waitFortime = 0; //ms
+
+	std::string toString();
+	std::string toDataString();
+	void fromDataString(std::string dataString);
+};
+
+class Flowchart
+{
+private:
+	std::vector<std::string> controlDataList;
+	std::vector<SmartControlData> controlDataStore;
+
+public:
+	Flowchart(Move& move, Gripper& gripper, Light& light, ExtMotor& extmotor, Functions& functions);
+	Functions& functions;
+	Move& move;
+	Gripper& gripper;
+	Light& light;
+	ExtMotor& extmotor;
+	void print();
+	void load(std::string path);
+	void start();
+};
+
 class EasyProtocol
 {
 private:
@@ -144,6 +198,7 @@ private:
 	bool info = false;
 	bool setCommunication();
 	void findPorts(int baudrate, std::string& port, char& robotid);
+
 public:
 	EasyProtocol(bool info = true);
 	~EasyProtocol();
@@ -153,6 +208,7 @@ public:
 	Gripper gripper;
 	Light light;
 	ExtMotor extmotor;
+	Flowchart flowchart;
 	void findRobot();
 	void setPort(std::string port, int baudrate = 9600);
 	void start();

@@ -79,6 +79,15 @@ int main()
 	robot.functions.waitFor(2000);
 	robot.extmotor.stop();
 
+	//Load Flowchart from file
+	//robot.flowchart.load("<path to your file>.fc");
+
+	//Print Flowchart to console
+	//robot.flowchart.print();
+
+	//Start Flowchart
+	//robot.flowchart.start();
+
 	//Stop communication
 	robot.stop();
 	return 0;
