@@ -9,7 +9,7 @@ Delta-Robot One recieve data in a very simple structure which is developed for t
 |Windows/Linux|Python|Every Python IDE|[one-easy-protocol](https://github.com/deltarobotone/one-easy-protocol)|
 |Windows|C++|Visual Studio|C++/VisualStudio|
 
-### All SDK's for One Easy Protocol are released as single file releases to provide an easy usage in your project.
+### All SDK's for One Easy Protocol are released as single file releases to provide an easy usage in your project. Copy the sources in your project folder and include the headerfile. Follow the instructions on this readme file for a quick startup or use the example console application.
 
 Tested successfully with Visual Studio 2015 & 2019. VS 2015 only supported at version 0.1. Please use [>>release v0.1<<](https://github.com/deltarobotone/one_easy_protocol/archive/v0.1.zip) for Visual studio 2015 (without flowchart support). Check out the example project for this IDE's. You also can use the precompiled ones for first communication tests.
 
