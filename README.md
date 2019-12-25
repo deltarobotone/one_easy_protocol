@@ -13,6 +13,12 @@ Delta-Robot One recieve data in a very simple structure which is developed for t
 
 Tested successfully with Visual Studio 2015 & 2019. VS 2015 only supported at version 0.1. Please use [>>release v0.1<<](https://github.com/deltarobotone/one_easy_protocol/archive/v0.1.zip) for Visual studio 2015 (without flowchart support). Check out the example project for this IDE's. You also can use the precompiled ones for first communication tests.
 
+## NEW!!! Flowchart support
+
+[<img src="https://github.com/deltarobotone/image_database/blob/master/logos/logos%20(15).PNG" width="550">](https://raw.githubusercontent.com/deltarobotone/image_database/master/logos/logos%20(15).PNG)
+
+Flowcharts can be used to write your own robot control programs for Delta-Robot One. Flowcharts can be stored in the flowchart data format (.fc). The One Smart Control Software (actually supported on Windows 10 and Android) provides functions to use (play), create, change, save and load flowcharts. Check out One Smart Control Software on your Device ([direct download](https://github.com/deltarobotone/one_smart_control_desktop) for Windows 10 or Play Store for Android). Additionally the One Easy Protocol development packages provide some basic functions for Flowcharts (actually supported with python on Linux and Windows and c++ on Windows). Load, print and start your flowchart file you have been created with One Smart Control. Check out One Easy Protocol on your Device (pip install one-easy-protocol for python or [direct download](https://github.com/deltarobotone/one_easy_protocol) for c++). With Flowcharts you are able to use your robot on an easy way.
+
 ## Prepare the robot
 
 First you have to set the robot in remote control mode with the switch on the circuit board (right side of display)
